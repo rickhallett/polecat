@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Fetch recent logs for agent inspection
+# Customize for your log source (file, docker, journald, API)
+
+set -e
+
+LINES="${1:-50}"
+
+# Option 1: Local log file
+if [[ -f "logs/dev.log" ]]; then
+    tail -n "$LINES" logs/dev.log
+    exit 0
+fi
+
+# Option 2: Docker container
+if command -v docker &>/dev/null; then
+    CONTAINER=$(docker ps --format '{{.Names}}' | head -1)
+    if [[ -n "$CONTAINER" ]]; then
+        docker logs --tail "$LINES" "$CONTAINER"
+        exit 0
+    fi
+fi
+
+# Option 3: journald (systemd service)
+# Uncomment and set SERVICE_NAME if using systemd
+# SERVICE_NAME="your-service"
+# journalctl -u "$SERVICE_NAME" -n "$LINES" --no-pager
+
+# Option 4: npm/node dev server (if running)
+if [[ -f ".npm-debug.log" ]]; then
+    tail -n "$LINES" .npm-debug.log
+    exit 0
+fi
+
+echo "⚠️  No log source found."
+echo "Configure this script for your setup:"
+echo "  - logs/dev.log (file)"
+echo "  - docker logs (container)"
+echo "  - journalctl (systemd)"

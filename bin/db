@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# CLI wrapper for database access
+# Allows agent to inspect schema and query data
+
+set -e
+
+# Load env if exists
+[[ -f .env.local ]] && source .env.local
+
+if [[ -z "$DATABASE_URL" ]]; then
+    echo "❌ DATABASE_URL not set. Check .env.local"
+    exit 1
+fi
+
+# Parse DATABASE_URL or use directly
+# Supports: postgres, sqlite, mysql
+
+if [[ "$DATABASE_URL" == postgres* ]]; then
+    if [[ -n "$1" ]]; then
+        psql "$DATABASE_URL" -c "$1"
+    else
+        psql "$DATABASE_URL"
+    fi
+elif [[ "$DATABASE_URL" == sqlite* ]] || [[ -f "$DATABASE_URL" ]]; then
+    DB_PATH="${DATABASE_URL#sqlite://}"
+    DB_PATH="${DB_PATH#sqlite:}"
+    if [[ -n "$1" ]]; then
+        sqlite3 "$DB_PATH" "$1"
+    else
+        sqlite3 "$DB_PATH"
+    fi
+else
+    echo "⚠️  Unknown database type. DATABASE_URL: $DATABASE_URL"
+    echo "Supported: postgres://, sqlite://, or file path"
+    exit 1
+fi

@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+# The Gate - must pass before any task is "done"
+# Returns non-zero on failure with verbose output
+
+set -e
+
+echo "🚦 Running gate..."
+echo ""
+
+# Detect package manager
+if [ -f "pnpm-lock.yaml" ]; then
+    PKG="pnpm"
+elif [ -f "yarn.lock" ]; then
+    PKG="yarn"
+elif [ -f "bun.lockb" ]; then
+    PKG="bun"
+else
+    PKG="npm"
+fi
+
+FAILED=0
+
+# Type check (TypeScript)
+if [ -f "tsconfig.json" ]; then
+    echo "📘 Type checking..."
+    if $PKG run typecheck 2>/dev/null || npx tsc --noEmit; then
+        echo "   ✅ Types OK"
+    else
+        echo "   ❌ Type errors"
+        FAILED=1
+    fi
+    echo ""
+fi
+
+# Format check (Prettier/Biome)
+if $PKG run format:check &>/dev/null; then
+    echo "🎨 Format checking..."
+    if $PKG run format:check; then
+        echo "   ✅ Format OK"
+    else
+        echo "   ❌ Format issues (run: $PKG run format)"
+        FAILED=1
+    fi
+    echo ""
+fi
+
+# Lint
+echo "🔍 Linting..."
+if $PKG run lint 2>/dev/null; then
+    echo "   ✅ Lint OK"
+else
+    echo "   ❌ Lint errors"
+    FAILED=1
+fi
+echo ""
+
+# Test
+echo "🧪 Testing..."
+if $PKG run test 2>/dev/null; then
+    echo "   ✅ Tests OK"
+else
+    echo "   ❌ Test failures"
+    FAILED=1
+fi
+echo ""
+
+# Build check (optional — catches more issues)
+if $PKG run build &>/dev/null; then
+    echo "🏗️  Build check..."
+    if $PKG run build; then
+        echo "   ✅ Build OK"
+    else
+        echo "   ❌ Build failed"
+        FAILED=1
+    fi
+    echo ""
+fi
+
+# Summary
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+if [ $FAILED -eq 0 ]; then
+    echo "✅ Gate passed. Ready to ship."
+    exit 0
+else
+    echo "❌ Gate failed. Fix issues above."
+    exit 1
+fi

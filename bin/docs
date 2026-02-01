@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Dump relevant files into context for the agent
+# Usage: ./bin/docs [pattern]
+
+set -e
+
+PATTERN="${1:-}"
+
+# If repomix is available, use it
+if command -v repomix &>/dev/null; then
+    if [[ -n "$PATTERN" ]]; then
+        repomix --include "$PATTERN"
+    else
+        repomix
+    fi
+    exit 0
+fi
+
+# Fallback: manual dump of key files
+echo "=== Project Structure ==="
+tree -I 'node_modules|dist|.git|coverage' -L 3 2>/dev/null || find . -type f -name "*.ts" -o -name "*.js" | head -50
+
+echo ""
+echo "=== Architecture ==="
+cat .agent/architecture.md 2>/dev/null || echo "(not found)"
+
+echo ""
+echo "=== Product Vision ==="
+cat .agent/product_vision.md 2>/dev/null || echo "(not found)"
+
+echo ""
+echo "=== CLAUDE.md ==="
+cat CLAUDE.md 2>/dev/null || echo "(not found)"
+
+if [[ -n "$PATTERN" ]]; then
+    echo ""
+    echo "=== Files matching: $PATTERN ==="
+    find . -type f -name "$PATTERN" -exec echo "--- {} ---" \; -exec cat {} \;
+fi

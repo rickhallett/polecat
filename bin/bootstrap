@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# Agent self-healing bootstrap script
+# Idempotent — safe to run repeatedly
+
+set -e
+
+echo "🔧 Running bootstrap..."
+
+# Check Node
+if ! command -v node &>/dev/null; then
+    echo "❌ Node not found."
+    if command -v mise &>/dev/null; then
+        echo "   → Installing via mise..."
+        mise install node@lts
+        mise use node@lts
+    else
+        echo "   → Install Node via mise, nvm, or your package manager"
+        exit 1
+    fi
+fi
+echo "✅ Node $(node -v)"
+
+# Check package manager
+if [ -f "pnpm-lock.yaml" ]; then
+    PKG="pnpm"
+    if ! command -v pnpm &>/dev/null; then
+        echo "📦 Installing pnpm..."
+        npm i -g pnpm
+    fi
+elif [ -f "yarn.lock" ]; then
+    PKG="yarn"
+elif [ -f "bun.lockb" ]; then
+    PKG="bun"
+else
+    PKG="npm"
+fi
+echo "📦 Using $PKG"
+
+# Install dependencies
+echo "📥 Installing dependencies..."
+$PKG install
+
+# Check env
+if [ ! -f ".env.local" ]; then
+    if [ -f ".env.example" ]; then
+        echo "⚠️  No .env.local found. Creating from .env.example..."
+        cp .env.example .env.local
+        echo "   → Fill in the values in .env.local"
+    fi
+fi
+
+# Check for required env vars (customize this list)
+if [ -f ".env.local" ]; then
+    source .env.local
+    # Example checks:
+    # [[ -z "$API_KEY" ]] && echo "⚠️  API_KEY not set in .env.local"
+    # [[ -z "$DATABASE_URL" ]] && echo "⚠️  DATABASE_URL not set in .env.local"
+fi
+
+# Run database migrations if applicable
+if [ -f "prisma/schema.prisma" ]; then
+    echo "🗄️  Running Prisma migrations..."
+    npx prisma migrate dev --name init 2>/dev/null || npx prisma db push
+fi
+
+if [ -f "drizzle.config.ts" ]; then
+    echo "🗄️  Running Drizzle migrations..."
+    npx drizzle-kit push 2>/dev/null || true
+fi
+
+# Run gate to verify environment
+echo ""
+echo "🚦 Verifying environment..."
+./bin/gate 2>/dev/null && echo "✅ Gate passed" || echo "⚠️  Gate has issues (run ./bin/gate for details)"
+
+echo ""
+echo "✅ Bootstrap complete."

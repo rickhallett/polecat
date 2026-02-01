@@ -1,4 +1,14 @@
-# polecat 🦡
+<div align="center">
+  <img src="assets/logo.png" alt="polecat logo" width="200">
+  <h1>polecat</h1>
+  <p><em>Sandboxed Claude CLI runner with tool restrictions</em></p>
+
+  ![License](https://img.shields.io/badge/license-MIT-blue)
+  ![Bash](https://img.shields.io/badge/bash-5.0+-green)
+  ![Claude](https://img.shields.io/badge/claude-cli-purple)
+</div>
+
+---
 
 Sandboxed Claude CLI runner with tool restrictions and retry logic.
 

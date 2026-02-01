@@ -1,0 +1,19 @@
+# Sandbox directory (runtime workdir for tasks)
+sandbox/
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+
+# Editor/IDE
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Temporary files
+*.tmp
+*.bak

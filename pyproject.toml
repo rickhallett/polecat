@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "polecat-supervisor"
+version = "0.1.0"
+description = "Supervisor daemon for polecat sandboxed Claude CLI runners"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "HAL", email = "hal@clawdbot.com"}
+]
+dependencies = [
+    "pexpect>=4.8",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+    "pytest-timeout>=2.1",
+    "pytest-cov>=4.0",
+]
+
+[project.scripts]
+polecatd = "polecat_supervisor.daemon:main"
+polectl = "polecat_supervisor.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
+[tool.coverage.run]
+source = ["src/polecat_supervisor"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 70
+exclude_lines = [
+    "if __name__ == .__main__.:",
+    "def main",
+    "pragma: no cover",
+]

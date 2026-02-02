@@ -17,3 +17,14 @@ sandbox/
 # Temporary files
 *.tmp
 *.bak
+
+# Task artifacts
+tasks/
+
+# Python
+__pycache__/
+*.egg-info/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/

@@ -12,6 +12,12 @@
   <img src="https://img.shields.io/badge/claude-cli-bb9af7" alt="Claude"/>
 </p>
 
+<p align="center">
+  <a href="#installation">Installation</a> •
+  <a href="#usage">Usage</a> •
+  <a href="https://tools.oceanheart.ai">all tools</a>
+</p>
+
 ---
 
 Sandboxed Claude CLI runner with tool restrictions and retry logic.

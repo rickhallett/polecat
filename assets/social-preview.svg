@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640">
+  <defs>
+    <linearGradient id="polecatGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#bb9af7"/>
+      <stop offset="50%" style="stop-color:#9d7cd8"/>
+      <stop offset="100%" style="stop-color:#7aa2f7"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1280" height="640" fill="#1a1b26"/>
+  
+  <!-- Sandbox/container pattern -->
+  <pattern id="sandbox" width="80" height="80" patternUnits="userSpaceOnUse">
+    <rect x="10" y="10" width="60" height="60" fill="none" stroke="#24283b" stroke-width="1" stroke-dasharray="4 2"/>
+  </pattern>
+  <rect width="1280" height="640" fill="url(#sandbox)" opacity="0.4"/>
+  
+  <!-- Decorative corners -->
+  <path d="M 40 80 L 40 40 L 80 40" fill="none" stroke="#bb9af7" stroke-width="2"/>
+  <path d="M 1200 40 L 1240 40 L 1240 80" fill="none" stroke="#bb9af7" stroke-width="2"/>
+  <path d="M 40 560 L 40 600 L 80 600" fill="none" stroke="#bb9af7" stroke-width="2"/>
+  <path d="M 1200 600 L 1240 600 L 1240 560" fill="none" stroke="#bb9af7" stroke-width="2"/>
+  
+  <!-- ASCII Art -->
+  <text font-family="'JetBrains Mono', 'Fira Code', monospace" font-size="36" fill="url(#polecatGrad)" font-weight="bold">
+    <tspan x="280" y="200">░█▀█░█▀█░█░░░█▀▀░█▀▀░█▀█░▀█▀</tspan>
+    <tspan x="280" y="250">░█▀▀░█░█░█░░░█▀▀░█░░░█▀█░░█░</tspan>
+    <tspan x="280" y="300">░▀░░░▀▀▀░▀▀▀░▀▀▀░▀▀▀░▀░▀░░▀░</tspan>
+  </text>
+  
+  <!-- Emoji -->
+  <text x="640" y="390" font-family="system-ui, sans-serif" font-size="72" text-anchor="middle">🦨</text>
+  
+  <!-- Tagline -->
+  <text x="640" y="470" font-family="'JetBrains Mono', monospace" font-size="28" text-anchor="middle" fill="#bb9af7">sandboxed Claude CLI runner</text>
+  
+  <!-- Description -->
+  <text x="640" y="520" font-family="'JetBrains Mono', monospace" font-size="18" text-anchor="middle" fill="#565f89">tool restrictions • permission boundaries • task isolation</text>
+  
+  <!-- Bash badge -->
+  <rect x="580" y="555" width="120" height="30" rx="15" fill="#bb9af7" opacity="0.15"/>
+  <text x="640" y="576" font-family="'JetBrains Mono', monospace" font-size="14" text-anchor="middle" fill="#bb9af7">Bash + Claude</text>
+</svg>

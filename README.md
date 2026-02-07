@@ -1,12 +1,16 @@
-<div align="center">
-  <img src="assets/logo.png" alt="polecat logo" width="200">
-  <h1>polecat</h1>
-  <p><em>Sandboxed Claude CLI runner with tool restrictions</em></p>
+<p align="center">
+  <img src="assets/social-preview.svg" alt="polecat" width="600"/>
+</p>
 
-  ![License](https://img.shields.io/badge/license-MIT-blue)
-  ![Bash](https://img.shields.io/badge/bash-5.0+-green)
-  ![Claude](https://img.shields.io/badge/claude-cli-purple)
-</div>
+<p align="center">
+  <em>Tool restrictions • Permission boundaries • Task isolation</em>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/license-MIT-blue" alt="License"/>
+  <img src="https://img.shields.io/badge/bash-5.0+-green" alt="Bash"/>
+  <img src="https://img.shields.io/badge/claude-cli-bb9af7" alt="Claude"/>
+</p>
 
 ---
 
